@@ -1,11 +1,16 @@
 import time
+import csv
+
+csv.field_size_limit(2147483647)
 
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
-    #TODO: Llama a las funciónes de creación de las estructuras de datos
-    pass
+    return {
+        "computers": [],
+        "load_summary": None
+    }
 
 
 # Funciones para la carga de datos
@@ -15,7 +20,18 @@ def load_data(catalog, filename):
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    pass
+    start_time = get_time()
+    computers = []
+    input_file = open("Data/" + filename, encoding="utf-8")
+
+    for row in reader:
+        catalog["computers"] = computers
+        total = len(computers)
+
+    end_time = get_time()
+    tiempo_transcurrido = delta_time(start_time, end_time)
+
+    return computers, total, tiempo_transcurrido
 
 # Funciones de consulta sobre el catálogo
 
