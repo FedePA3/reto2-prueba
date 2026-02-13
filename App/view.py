@@ -1,12 +1,14 @@
 import sys
-
+import App.logic as logic
+from DataStructures.List import array_list as lt
 
 def new_logic():
     """
         Se crea una instancia del controlador
     """
     #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    control = logic.new_logic()
+    return control
 
 def print_menu():
     print("Bienvenido")
@@ -24,8 +26,8 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    pass
-
+    modelo, marca, anio, cpu, gpu, precio = logic.load_data(control)
+    return modelo, marca, anio, cpu, gpu, precio
 
 def print_data(control, id):
     """
