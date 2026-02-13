@@ -51,7 +51,17 @@ def print_data(control, id):
         Función que imprime un dato dado su ID
     """
     #TODO: Realizar la función para imprimir un elemento
-    pass
+    size = lt.size(control["computers"])
+    if id < 0 or id >= size:
+        raise Exception("IndexError: id fuera del rango de lista de computadores")
+    
+    comp = lt.get_element(control["computers"], id)
+    print("Modelo:", comp["model"])
+    print("Marca:", comp["brand"])
+    print("Año:", comp["release_year"])
+    print("CPU:", comp["cpu_model"])
+    print("GPU:", comp["gpu_model"])
+    print("Precio:", comp["price"])
 
 def print_req_1(control):
     """
