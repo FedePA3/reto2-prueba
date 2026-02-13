@@ -1,16 +1,24 @@
 import time
 import csv
+import os
+
+from DataStructures.List import array_list as lt
+from DataStructures.List import single_linked_list as sll
+
+
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
 csv.field_size_limit(2147483647)
+
 
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
-    return {
-        "computers": [],
-        "load_summary": None
+    catalog = {
+        "computers": lt.new_list()
     }
+    return catalog
 
 
 # Funciones para la carga de datos
