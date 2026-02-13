@@ -11,6 +11,17 @@ data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 csv.field_size_limit(2147483647)
 
 
+def get_time():
+    return float(time.perf_counter() * 1000)
+
+
+def delta_time(end, start):
+    """
+    Devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    return float(end - start)
+
+
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
