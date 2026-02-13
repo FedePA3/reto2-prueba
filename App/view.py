@@ -25,9 +25,26 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    modelo, marca, anio, cpu, gpu, precio = logic.load_data(control)
-    return modelo, marca, anio, cpu, gpu, precio
+    filename = "computer_prices_large.csv"
+    total_computers, min_comp, max_comp, load_time = logic.load_data(control, filename)
+    print("Total computadores cargados: ", total_computers)
+    print("Tiempo de carga (ms):", round(load_time, 3))
+
+    print("\nComputador con MENOR precio:")
+    print("device_type:", min_comp["device_type"])
+    print("brand:", min_comp["brand"])
+    print("model:", min_comp["model"])
+    print("release_year:", min_comp["release_year"])
+    print("os:", min_comp["os"])
+
+    print("\nComputador con MAYOR precio:")
+    print("device_type:", max_comp["device_type"])
+    print("brand:", max_comp["brand"])
+    print("model:", max_comp["model"])
+    print("release_year:", max_comp["release_year"])
+    print("os:", max_comp["os"])
+
+    return total_computers, min_comp, max_comp, load_time
 
 def print_data(control, id):
     """
@@ -114,7 +131,7 @@ def main():
         elif int(inputs) == 5:
             print_req_5(control)
 
-        elif int(inputs) == 5:
+        elif int(inputs) == 6:
             print_req_6(control)
 
         elif int(inputs) == 7:
