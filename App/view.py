@@ -1,5 +1,6 @@
 import sys
 import App.logic as logic
+from tabulate import tabulate
 from DataStructures.List import array_list as lt
 
 def new_logic():
@@ -26,26 +27,31 @@ def load_data(control):
     Carga los datos
     """
     filename = "computer_prices_large.csv"
-    total_computers, min_comp, max_comp, load_time = logic.load_data(control, filename)
+    total_computers, min_comp, max_comp, load_time, first_five_comp, last_five_comp = logic.load_data(control, filename)
     print("Total computadores cargados: ", total_computers)
     print("Tiempo de carga (ms):", round(load_time, 3))
 
     print("\nComputador con MENOR precio:")
-    print("device_type:", min_comp["device_type"])
-    print("brand:", min_comp["brand"])
-    print("model:", min_comp["model"])
-    print("release_year:", min_comp["release_year"])
-    print("os:", min_comp["os"])
+    min_list = [min_comp]
+    print(tabulate(format_comp_for_table(min_list), headers = ["Modelo", "Marca", "Año", "CPU", "GPU", "Precio"], tablefmt="pretty"))
 
     print("\nComputador con MAYOR precio:")
-    print("device_type:", max_comp["device_type"])
-    print("brand:", max_comp["brand"])
-    print("model:", max_comp["model"])
-    print("release_year:", max_comp["release_year"])
-    print("os:", max_comp["os"])
+    max_list = [max_comp]
+    print(tabulate(format_comp_for_table(max_list), headers = ["Modelo", "Marca", "Año", "CPU", "GPU", "Precio"], tablefmt="pretty"))
 
-    return total_computers, min_comp, max_comp, load_time
+    print("\nPrimeros 5 computadores cargados:")
+    print(tabulate(format_comp_for_table(first_five_comp), headers = ["Modelo", "Marca", "Año", "CPU", "GPU", "Precio"], tablefmt="pretty"))
+    print("\nÚltimos 5 computadores cargados:")
+    print(tabulate(format_comp_for_table(last_five_comp), headers = ["Modelo", "Marca", "Año", "CPU", "GPU", "Precio"], tablefmt="pretty"))
 
+def format_comp_for_table(computers):
+    data_comp = []
+    for comp in computers:
+        fila = [comp["model"],comp["brand"],comp["release_year"],comp["cpu_brand"],comp["gpu_brand"],comp["price"]]
+        data_comp.append(fila)
+    return data_comp
+        
+    
 def print_data(control, id):
     """
         Función que imprime un dato dado su ID

@@ -34,11 +34,13 @@ def load_data(catalog, filename):
 
     total_computers = load_computers(catalog, filename)
     min_comp, max_comp = get_min_max_price_computers(catalog["computers"])
-
+    first_five_comp = get_first_five(catalog)
+    last_five_comp = get_last_five(catalog)
+    
     end_time = get_time()
     tiempo_transcurrido = delta_time(start_time, end_time)
 
-    return total_computers, min_comp, max_comp, tiempo_transcurrido
+    return total_computers, min_comp, max_comp, tiempo_transcurrido, first_five_comp, last_five_comp
 
 # Funciones de consulta sobre el catálogo
 
@@ -147,3 +149,25 @@ def get_min_max_price_computers(computers_list):
         i += 1
 
     return min_comp, max_comp
+
+def get_first_five(catalog):
+    """
+    Función para obtener los 5 primeros computadores del dataset
+    """
+    first_five = []
+    tamanio = lt.size(catalog["computers"])
+    for i in range(min(5,tamanio)):
+        first_five.append(lt.get_element(catalog["computers"], i))
+
+    return first_five
+
+def get_last_five(catalog):
+    """
+    Función para obtener los 5 últimos computadores del dataset
+    """
+    last_five = []
+    tamanio = lt.size(catalog["computers"])
+    for i in range(max(0, tamanio - 5), tamanio):
+        last_five.append(lt.get_element(catalog["computers"], i))
+
+    return last_five
