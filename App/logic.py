@@ -53,12 +53,69 @@ def req_1(catalog):
     pass
 
 
-def req_2(catalog):
+def req_2(catalog, min_price, max_price):
     """
     Retorna el resultado del requerimiento 2
     """
-    # TODO: Modificar el requerimiento 2
-    pass
+
+    start_time = get_time()
+
+    lista = lt.new_list()
+    tamanio = lt.size(catalog["computers"])
+
+    contador = 0
+    sum_ram = 0.0
+    sum_vram = 0.0
+    sum_price = 0.0
+    
+    most_modern = None
+    min_comp = None
+    max_comp = None
+
+    for i in range(tamanio):
+        computer = lt.get_element(catalog["computers"], i)
+        price = float(computer["price"])
+        
+        if min_price <= price <= max_price:
+            lt.add_last(lista, computer)
+            contador += 1
+            sum_ram += float(computer["ram_gb"])
+            sum_vram += float(computer["vram_gb"])
+            sum_price += price
+            
+            if most_modern is None:
+                most_modern = computer
+            else:
+                if int(computer["release_year"]) > int(most_modern["release_year"]):
+                    most_modern = computer
+                elif int(computer["release_year"]) == int(most_modern["release_year"]):
+                    if price > float(most_modern["price"]):
+                        most_modern = computer
+            
+            if (min_comp is None) or (price < float(min_comp["price"])):
+                min_comp = computer
+            
+            if (max_comp is None) or (price > float(max_comp["price"])):
+                max_comp = computer
+
+
+    if contador > 0:
+
+        prom_ram = sum_ram / contador
+        prom_vram = sum_vram / contador
+        prom_price = sum_price / contador
+
+    else:
+        prom_ram = 0.0
+        prom_vram = 0.0
+        prom_price = 0.0
+
+
+
+    end_time = get_time()
+    tiempo_transcurrido = delta_time(start_time, end_time)
+
+    return lista, contador, prom_ram, prom_vram, prom_price, most_modern, min_comp, max_comp, tiempo_transcurrido
 
 
 def req_3(catalog):
