@@ -107,8 +107,38 @@ def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    cpu_brand = input(" Ingrese la marca de CPU: ")
+    cpu_tier = input(" Ingrese el CPU tier: ")
+
+    (
+        count,
+        avg_price,
+        avg_ram,
+        avg_vram,
+        avg_threads,
+        most_common_gpu,
+        most_common_gpu_appearances,
+        most_common_release_year,
+        most_common_release_year_appearances,
+        elapsed_time,
+    ) = logic.req_3(control, cpu_brand, cpu_tier)
+
+    print(f" Tiempo de ejecución: {elapsed_time} ms")
+    print(f" Número total de computadores que cumplieron el filtro: {count}")
+
+    if count == 0:
+        print(" No se encontraron computadores con esos criterios.")
+    else:
+        data_req_3 = [
+            ["Cantidad de computadores que cumplen con las características", count],
+            ["Promedio de precio", f"${round(avg_price, 2)}"],
+            ["Promedio de RAM", f"{round(avg_ram, 2)} GB"],
+            ["Promedio de VRAM", f"{round(avg_vram, 2)} GB"],
+            ["Promedio de número de hilos", round(avg_threads, 2)],
+            ["GPU más frecuente", f"{most_common_gpu} ({most_common_gpu_appearances} ocurrencias)"],
+            ["Año de lanzamiento más frecuente", f"{most_common_release_year} ({most_common_release_year_appearances} ocurrencias)"],
+        ]
+        print(tabulate(data_req_3, headers=["Métrica", "Valor"], tablefmt="pretty"))
 
 
 def print_req_4(control):
