@@ -45,13 +45,145 @@ def load_data(catalog, filename):
 # Funciones de consulta sobre el catálogo
 
 
-def req_1(catalog):
+def req_1(catalog, brand):
     """
     Retorna el resultado del requerimiento 1
     """
-    # TODO: Modificar el requerimiento 1
-    pass
+    #Inicializamos el tiempo
+    start_time = get_time()
+    tamanio = lt.size(catalog["computers"])
+    #Eliminamos caracteres especiales y hacemos un lower para la marca
+    brand_filter = brand.strip().lower()
 
+    #Inicializamos la suma del total de computadores con esa marca, precio, ram, vram, num de nucleos y año
+    total_comp = 0
+    sum_price = 0.0
+    sum_ram = 0.0
+    sum_vram = 0.0
+    sum_num_nucleos = 0.0
+    sum_release = 0.0
+
+    #Inicializamos los datos solicitados en la documentación
+    min_price = None
+    max_price = None
+    min_ram = None
+    max_ram = None
+    min_vram = None
+    max_vram = None
+    min_nucleos = None
+    max_nucleos = None
+    min_release = None
+    max_release = None
+    
+    model_max_comp = None
+    model_min_comp = None
+    max_price_weight = None
+    min_price_weight = None
+
+    for i in range(tamanio):
+        computer = lt.get_element(catalog["computers"], i)
+        if computer["brand"].strip().lower() != brand_filter:
+            continue
+
+        price = float(computer["price"])
+        ram = float(computer["ram_gb"])
+        vram = float(computer["vram_gb"])
+        cpu_cores = float(computer["cpu_cores"])
+        release_year = int(computer["release_year"])
+        weight = float(computer["weight_kg"])
+
+        #Dado que hemos encontrado un computador con la marca ingresada, sumamos a los valores correspondientes
+        total_comp += 1
+        sum_price += price
+        sum_ram += ram
+        sum_vram += vram
+        sum_num_nucleos += cpu_cores
+        sum_release += release_year
+
+        #Encontramos el menor
+        if min_price is None or price < min_price:
+            min_price = price
+            model_min_comp = computer["model"]
+            min_price_weight = weight
+        #En caso de empate, nos quedamos con el de menor peso
+        elif price == min_price and weight < min_price_weight:
+            model_min_comp = computer["model"]
+            min_price_weight = weight
+        
+        #Encontramos el de mayor precio
+        if max_price is None or price > max_price:
+            max_price = price
+            model_max_comp = computer["model"]
+            max_price_weight = weight
+        #En caso de empate, nos quedamos con el de menor peso
+        elif price == max_price and weight < max_price_weight:
+            model_max_comp = computer["model"]
+            max_price_weight = weight
+
+        #Encontramos el computador de menor y mayor ram
+        if min_ram is None or ram < min_ram:
+            min_ram = ram
+        if max_ram is None or ram > max_ram:
+            max_ram = ram
+
+        #Encontramos el computador de menor y mayor vram
+        if min_vram is None or vram < min_vram:
+            min_vram = vram
+        if max_vram is None or vram > max_vram:
+            max_vram = vram
+
+        #Encontramos el computador de menor y mayor número de nucleos
+        if min_nucleos is None or cpu_cores < min_nucleos:
+            min_nucleos = cpu_cores
+        if max_nucleos is None or cpu_cores > max_nucleos:
+            max_nucleos = cpu_cores
+
+        #Encontramos el computador con el menor y mayor año de lanzamiento
+        if min_release is None or release_year < min_release:
+            min_release = release_year
+        if max_release is None or release_year > max_release:
+            max_release = release_year
+
+    #Verificamos que exista al menos 1 computador de dicha marca, sino retornamos 0 en cada uno de los promedios solicitados
+    if total_comp > 0:
+        prom_price = sum_price / total_comp
+        prom_ram = sum_ram / total_comp
+        prom_vram = sum_vram / total_comp
+        prom_num_nucleos = sum_num_nucleos / total_comp
+        prom_anio_release = sum_release / total_comp
+    else:
+        prom_price = 0.0
+        prom_ram = 0.0
+        prom_vram = 0.0
+        prom_num_nucleos = 0.0
+        prom_anio_release = 0.0
+        
+    general_info = {
+        "marca": brand,
+        "total_comp": total_comp,
+        "prom_price": prom_price,
+        "min_price": min_price,
+        "max_price": max_price,
+        "prom_ram": prom_ram,
+        "min_ram": min_ram,
+        "max_ram": max_ram,
+        "prom_vram": prom_vram,
+        "min_vram": min_vram,
+        "max_vram": max_vram,
+        "prom_nucleos": prom_num_nucleos,
+        "min_nucleos": min_nucleos,
+        "max_nucleos": max_nucleos,
+        "prom_anio_release": prom_anio_release,
+        "min_release": min_release,
+        "max_release": max_release,
+        "model_max": model_max_comp,
+        "model_min": model_min_comp
+    }
+    #Finalizamos el tiempo de ejecución y calculamos el tiempo transcurrido
+    end_time = get_time()
+    tiempo_transcurrido = delta_time(start_time, end_time)
+
+    return tiempo_transcurrido, total_comp, prom_price, min_price, max_price, prom_ram, min_ram, max_ram, prom_vram, min_vram, max_vram, prom_num_nucleos, min_nucleos, max_nucleos, prom_anio_release, min_release, max_release, model_max_comp, model_min_comp, general_info
 
 def req_2(catalog, min_price, max_price):
     """
