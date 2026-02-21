@@ -250,13 +250,99 @@ def req_2(catalog, min_price, max_price):
     return lista, contador, prom_ram, prom_vram, prom_price, most_modern, min_comp, max_comp, tiempo_transcurrido
 
 
-def req_3(catalog):
+def req_3(catalog, cpu_brand, cpu_tier):
     """
     Retorna el resultado del requerimiento 3
     """
-    # TODO: Modificar el requerimiento 3
-    pass
+    start_time = get_time()
 
+    filtered_computers = sll.new_list()
+    sum_price = 0.0
+    sum_ram = 0.0
+    sum_vram = 0.0
+    sum_threads = 0.0
+    gpu_appearances = {}
+    release_year_appearances = {}
+
+    cpu_brand_filter = cpu_brand.lower()
+    cpu_tier_filter = str(cpu_tier).lower()
+
+    size = lt.size(catalog["computers"])
+    for i in range(size):
+        computer = lt.get_element(catalog["computers"], i)
+
+        if computer["cpu_brand"].lower() == cpu_brand_filter and computer["cpu_tier"].lower() == cpu_tier_filter:
+            sll.add_last(filtered_computers, computer)
+
+            sum_price += float(computer["price"])
+            sum_ram += float(computer["ram_gb"])
+            sum_vram += float(computer["vram_gb"])
+            sum_threads += float(computer["cpu_threads"])
+
+            gpu_brand = computer["gpu_brand"]
+            release_year = computer["release_year"]
+
+            if gpu_brand in gpu_appearances:
+                gpu_appearances[gpu_brand] += 1
+            else:
+                gpu_appearances[gpu_brand] = 1
+
+            if release_year in release_year_appearances:
+                release_year_appearances[release_year] += 1
+            else:
+                release_year_appearances[release_year] = 1
+
+    count = sll.size(filtered_computers)
+
+    if count > 0:
+        avg_price = sum_price / count
+        avg_ram = sum_ram / count
+        avg_vram = sum_vram / count
+        avg_threads = sum_threads / count
+        most_common_gpu, most_common_gpu_appearances = get_most_common(gpu_appearances)
+        most_common_release_year, most_common_release_year_appearances = get_most_common(release_year_appearances)
+    else:
+        avg_price = 0.0
+        avg_ram = 0.0
+        avg_vram = 0.0
+        avg_threads = 0.0
+        most_common_gpu = None
+        most_common_gpu_appearances = 0
+        most_common_release_year = None
+        most_common_release_year_appearances = 0
+
+    end_time = get_time()
+    elapsed_time = delta_time(start_time, end_time)
+
+    return (
+        count,
+        avg_price,
+        avg_ram,
+        avg_vram,
+        avg_threads,
+        most_common_gpu,
+        most_common_gpu_appearances,
+        most_common_release_year,
+        most_common_release_year_appearances,
+        elapsed_time,
+    )
+
+
+def get_most_common(counter_dict):
+    """
+    Retorna el valor de mayor frecuencia en un diccionario de conteos.
+    """
+    most_common = None
+    max_count = -1
+
+    for key, value in counter_dict.items():
+        if value > max_count:
+            max_count = value
+            most_common = key
+        elif value == max_count and most_common is not None and str(key) < str(most_common):
+            most_common = key
+
+    return most_common, max_count
 
 def req_4(catalog):
     """
