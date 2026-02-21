@@ -73,7 +73,7 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    marca = input(" Ingrese el nombre de la marca\n(EJEMPLO: Samsung): ").strip()
+    marca = input(" Ingrese el nombre de la marca\n (EJEMPLO: Samsung): ").strip()
 
     (tiempo, total_comp, prom_price, min_price, max_price,
      prom_ram, min_ram, max_ram, prom_vram, min_vram, max_vram,
@@ -140,7 +140,7 @@ def print_req_1(control):
     print(tabulate(tabla_vram, headers=["Promedio", "Minimo", "Maximo"], tablefmt="pretty"))
     print("\n[Nucleos CPU]")
     print(tabulate(tabla_nucleos, headers=["Promedio", "Minimo", "Maximo"], tablefmt="pretty"))
-    print("\n[Anio de lanzamiento]")
+    print("\n[Año de lanzamiento]")
     print(tabulate(tabla_anio, headers=["Promedio", "Minimo", "Maximo"], tablefmt="pretty"))
     print("\n[Modelos destacados]")
     print(tabulate(tabla_modelos, headers=["Tipo", "Modelo", "Precio"], tablefmt="pretty"))
@@ -164,28 +164,33 @@ def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-""""   min_price = float(input(" Ingrese el precio mínimo: "))
+    min_price = float(input(" Ingrese el precio mínimo: "))
     max_price = float(input(" Ingrese el precio máximo: "))
 
     lista, contador, p_ram, p_vram, p_price, moderno, barato, caro, tiempo = logic.req_2(control, min_price, max_price)
 
-    print(f" Tiempo estimado:{tiempo} ms ")
+    print("\n" + "=" * 65)
+    print(" Requerimiento 2: Filtrar computadores por rango de precio")
+    print("=" * 65)
+    print(f" Tiempo de ejecución: {tiempo:.3f} ms")
+    
     if contador == 0:
         print(" No se encontraron computadores en este rango de precio.")
-        
+    
     else:  
-        print(f" Se encontraron {contador} computadores que coinciden.")
-        print(f" RAM promedio:   {p_ram} GB")
-        print(f" VRAM promedio:  {p_vram} GB")
-        print(f" Precio promedio: ${p_price}")
+        print(f" Se encontraron {contador} computadores que coinciden.\n")
+        print(f" RAM promedio:   {p_ram:.2f} GB\n")
+        print(f" VRAM promedio:  {p_vram:.2f} GB\n")
+        print(f" Precio promedio: ${p_price:.2f}")
         
-        print("-"*50)
-                
-        print(" EQUIPOS DESTACADOS:")
-        print(f" * El más moderno: {moderno['model']} ({moderno["brand"]}) ({moderno["release_year"]}) ({moderno["cpu_brand"]}) ({moderno["gpu_brand"]}) - {float(moderno['price'])}")
-        print(f" * El más barato:  {barato['model']} ({barato["brand"]}) ({barato["release_year"]}) ({barato["cpu_brand"]}) ({barato["gpu_brand"]}) - ${float(barato['price'])}")
-        print(f" * El más caro:    {caro['model']} ({caro["brand"]}) ({caro["release_year"]}) ({caro["cpu_brand"]}) ({caro["gpu_brand"]}) - ${float(caro['price'])}")
-"""
+        print("\n" + "=" * 65)
+        print(f" EQUIPOS DESTACADOS")
+        print("=" * 65)
+        
+        print(f" *El más moderno: {moderno['model']} ({moderno['brand']}) ({moderno['release_year']}) ({moderno['cpu_brand']}) ({moderno['gpu_brand']}) - ${float(moderno['price']):.2f}")
+        print(f" *El más barato:  {barato['model']} ({barato['brand']}) ({barato['release_year']}) ({barato['cpu_brand']}) ({barato['gpu_brand']}) - ${float(barato['price']):.2f}")
+        print(f" *El más caro:    {caro['model']} ({caro['brand']}) ({caro['release_year']}) ({caro['cpu_brand']}) ({caro['gpu_brand']}) - ${float(caro['price']):.2f}")
+        print("")
 def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
