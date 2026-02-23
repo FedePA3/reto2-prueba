@@ -1,4 +1,4 @@
-import time
+﻿import time
 import csv
 import os
 
@@ -42,7 +42,7 @@ def load_data(catalog, filename):
 
     return total_computers, min_comp, max_comp, tiempo_transcurrido, first_five_comp, last_five_comp
 
-# Funciones de consulta sobre el catálogo
+# Funciones de consulta sobre el catÃ¡logo
 
 
 def req_1(catalog, brand):
@@ -55,7 +55,7 @@ def req_1(catalog, brand):
     #Eliminamos caracteres especiales y hacemos un lower para la marca
     brand_filter = brand.strip().lower()
 
-    #Inicializamos la suma del total de computadores con esa marca, precio, ram, vram, num de nucleos y año
+    #Inicializamos la suma del total de computadores con esa marca, precio, ram, vram, num de nucleos y aÃ±o
     total_comp = 0
     sum_price = 0.0
     sum_ram = 0.0
@@ -63,7 +63,7 @@ def req_1(catalog, brand):
     sum_num_nucleos = 0.0
     sum_release = 0.0
 
-    #Inicializamos los datos solicitados en la documentación
+    #Inicializamos los datos solicitados en la documentaciÃ³n
     min_price = None
     max_price = None
     min_ram = None
@@ -132,13 +132,13 @@ def req_1(catalog, brand):
         if max_vram is None or vram > max_vram:
             max_vram = vram
 
-        #Encontramos el computador de menor y mayor número de nucleos
+        #Encontramos el computador de menor y mayor nÃºmero de nucleos
         if min_nucleos is None or cpu_cores < min_nucleos:
             min_nucleos = cpu_cores
         if max_nucleos is None or cpu_cores > max_nucleos:
             max_nucleos = cpu_cores
 
-        #Encontramos el computador con el menor y mayor año de lanzamiento
+        #Encontramos el computador con el menor y mayor aÃ±o de lanzamiento
         if min_release is None or release_year < min_release:
             min_release = release_year
         if max_release is None or release_year > max_release:
@@ -179,7 +179,7 @@ def req_1(catalog, brand):
         "model_max": model_max_comp,
         "model_min": model_min_comp
     }
-    #Finalizamos el tiempo de ejecución y calculamos el tiempo transcurrido
+    #Finalizamos el tiempo de ejecuciÃ³n y calculamos el tiempo transcurrido
     end_time = get_time()
     tiempo_transcurrido = delta_time(start_time, end_time)
 
@@ -344,14 +344,94 @@ def get_most_common(counter_dict):
 
     return most_common, max_count
 
-def req_4(catalog):
+def req_4(catalog, cpu_brand, gpu_model):
     """
     Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 4
-    pass
+    # Inicializamos el tiempo
+    start_time = get_time()
+    size = lt.size(catalog["computers"])
 
+    # Filtros normalizados
+    brand_filter = cpu_brand.strip().lower()
+    gpu_filter = gpu_model.strip().lower()
 
+    # Totales y acumulados para promedios
+    total_comp = 0
+    sum_price = 0.0
+    sum_vram = 0.0
+    sum_ram = 0.0
+    sum_modo_boost = 0.0
+
+    # Dos computadores mas costosos (desempate por menor peso)
+    primer_mas_costoso = None
+    segundo_mas_costoso = None
+
+    for i in range(size):
+        computer = lt.get_element(catalog["computers"], i)
+
+        if (
+            computer["cpu_brand"].strip().lower() != brand_filter
+            or computer["gpu_model"].strip().lower() != gpu_filter
+        ):
+            continue
+
+        price = float(computer["price"])
+        ram = float(computer["ram_gb"])
+        vram = float(computer["vram_gb"])
+        cpu_boost = float(computer["cpu_boost_ghz"])
+
+        total_comp += 1
+        sum_price += price
+        sum_ram += ram
+        sum_vram += vram
+        sum_modo_boost += cpu_boost
+
+        # Actualiza top 2
+        if es_mejor_candidato(computer, primer_mas_costoso):
+            segundo_mas_costoso = primer_mas_costoso
+            primer_mas_costoso = computer
+        elif es_mejor_candidato(computer, segundo_mas_costoso):
+            segundo_mas_costoso = computer
+
+    if total_comp > 0:
+        prom_price = sum_price / total_comp
+        prom_vram = sum_vram / total_comp
+        prom_ram = sum_ram / total_comp
+        prom_cpu_boost = sum_modo_boost / total_comp
+    else:
+        prom_price = 0.0
+        prom_vram = 0.0
+        prom_ram = 0.0
+        prom_cpu_boost = 0.0
+
+    mas_costosos = [primer_mas_costoso, segundo_mas_costoso]
+
+    end_time = get_time()
+    tiempo_transcurrido = delta_time(start_time, end_time)
+
+    return tiempo_transcurrido, total_comp, prom_price, prom_vram, prom_ram, prom_cpu_boost, mas_costosos
+
+def es_mejor_candidato(c1, c2):
+        """
+        Retorna True si c1 debe ir por encima de c2:
+        mayor precio y, en empate, menor peso.
+        """
+        if c2 is None:
+            return True
+
+        c1_price = float(c1["price"])
+        c2_price = float(c2["price"])
+
+        if c1_price > c2_price:
+            return True
+        if c1_price < c2_price:
+            return False
+
+        c1_weight = float(c1["weight_kg"])
+        c2_weight = float(c2["weight_kg"])
+        return c1_weight < c2_weight
+    
 def req_5(catalog):
     """
     Retorna el resultado del requerimiento 5
@@ -427,7 +507,7 @@ def get_min_max_price_computers(computers_list):
 
 def get_first_five(catalog):
     """
-    Función para obtener los 5 primeros computadores del dataset
+    FunciÃ³n para obtener los 5 primeros computadores del dataset
     """
     first_five = []
     tamanio = lt.size(catalog["computers"])
@@ -438,7 +518,7 @@ def get_first_five(catalog):
 
 def get_last_five(catalog):
     """
-    Función para obtener los 5 últimos computadores del dataset
+    FunciÃ³n para obtener los 5 Ãºltimos computadores del dataset
     """
     last_five = []
     tamanio = lt.size(catalog["computers"])
@@ -446,3 +526,4 @@ def get_last_five(catalog):
         last_five.append(lt.get_element(catalog["computers"], i))
 
     return last_five
+

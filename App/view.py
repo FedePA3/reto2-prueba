@@ -191,6 +191,7 @@ def print_req_2(control):
         print(f" *El más barato:  {barato['model']} ({barato['brand']}) ({barato['release_year']}) ({barato['cpu_brand']}) ({barato['gpu_brand']}) - ${float(barato['price']):.2f}")
         print(f" *El más caro:    {caro['model']} ({caro['brand']}) ({caro['release_year']}) ({caro['cpu_brand']}) ({caro['gpu_brand']}) - ${float(caro['price']):.2f}")
         print("")
+        
 def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
@@ -234,9 +235,57 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    cpu_brand = input(" Ingrese la marca de CPU: ").strip()
+    gpu_model = input(" Ingrese el modelo de GPU: ").strip()
 
+    (
+        tiempo, total_comp, prom_price, 
+        prom_vram, prom_ram, prom_cpu_boost, mas_costosos
+    ) = logic.req_4(control, cpu_brand , gpu_model)
 
+    print("\n" + "=" * 90)
+    print(" Requerimiento 4: Obtener el precio promedio para una combinación CPU Brand – GPU Model")
+    print("=" * 90)
+    print(f" Tiempo de ejecución: {tiempo:.3f} ms")
+    
+    if total_comp == 0:
+        print(" No se encontraron computadores con esas especificaciones.")
+        return
+    else:  
+        print(f" Se encontraron {total_comp} computadores con CPU {cpu_brand} y modelo de GPU {gpu_model}.\n")
+        print(f" Precio promedio: ${prom_price:.2f}\n")
+        print(f" VRAM promedio: {prom_vram:.2f} GB\n")
+        print(f" RAM promedio: {prom_ram:.2f} GB\n")
+        print(f" Promedio de velocidad en modo boost del procesador: {prom_cpu_boost:.2f} Ghz")
+        
+        print("\n" + "=" * 50)
+        print(f" Computadores más costosos")
+        print("=" * 50)
+        
+        comp_max_price = format_req_4_for_table(mas_costosos)
+        headers = ["Modelo", "Marca", "Año", "CPU Model", "Precio"]
+
+        if len(comp_max_price) > 0:
+            print(" 1. Computador más costoso:")
+            print(tabulate([comp_max_price[0]], headers=headers, tablefmt="pretty"))
+
+        if len(comp_max_price) > 1:
+            print(" 2. Segundo computador más costoso:")
+            print(tabulate([comp_max_price[1]], headers=headers, tablefmt="pretty"))
+        else:
+            print(" 2. Segundo computador más costoso: No disponible (solo hubo un resultado).")
+
+        print("")
+        
+def format_req_4_for_table(computers):
+    data_comp = []
+    for comp in computers:
+        if comp is None:
+            continue
+        fila = [comp["model"],comp["brand"],comp["release_year"],comp["cpu_model"],comp["price"]]
+        data_comp.append(fila)
+    return data_comp
+    
 def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
