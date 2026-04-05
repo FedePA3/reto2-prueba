@@ -61,6 +61,8 @@ def load_data(catalog):
                 mp.put(mapa,y,int(x[y]))
             elif y == "price" or y == "cpu_threads" or y == "cpu_base_ghz" or y == "cpu_boost_ghz" or y == "display_size_in" or y == "bluetooth" or y == "weight_kg":
                 mp.put(mapa,y,float(x[y]))
+            else:
+                mp.put(mapa,y,x[y])
         al.add_last(computers,mapa)
         total += 1
         sistema = mp.get(mapa,"os")
