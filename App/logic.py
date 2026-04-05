@@ -48,14 +48,14 @@ def load_data(catalog):
     total = 0
     Os = mp.new_map(100,0.5)
     Oss = al.new_list()
-    Año_minimo = float("inf")
+    Año_minimo = 0
     Año_maximo = float("inf")
-    precio_minimo = 100000
+    precio_minimo = float("inf")
     precio_maximo = 0
     primeros = al.new_list()
     ultimos = al.new_list()
     for x in input_file:
-        mapa = mp.new_map()
+        mapa = mp.new_map(40,0.5)
         for y in x:
             if y == "release_year" or y == "cpu_cores" or y == "cpu_tier" or y == "gpu_tier" or y == "vram_gb" or y == "ram_gb" or y == "storage_gb" or y == "storage_drive_count" or y == "refresh_hz" or y == "battery_wh" or y == "charger_watts" or y == "psu_watts" or y == "warranty_months":
                 mp.put(mapa,y,int(x[y]))
