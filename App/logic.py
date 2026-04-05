@@ -3,7 +3,7 @@ import csv
 import os
 import random
 from DataStructures.List import array_list as al
-from DataStructures.Map import map_functions as mp
+from DataStructures.Map import map_functions as mf
 from DataStructures.Map import map_entry as me
 from DataStructures.Map import map_linear_probing as mp
 csv.field_size_limit(2147483647)
@@ -46,16 +46,16 @@ def load_data(catalog):
     input_file = csv.DictReader(open(booksfile, encoding='utf-8'))
     computers = catalog['computers']
     total = 0
-    Os = mp.new_map(100,0.5)
+    Os = mp.new_map(4,0.5)
     Oss = al.new_list()
-    Año_minimo = 0
-    Año_maximo = float("inf")
+    Año_minimo = float("inf")
+    Año_maximo = 0
     precio_minimo = float("inf")
     precio_maximo = 0
     primeros = al.new_list()
     ultimos = al.new_list()
     for x in input_file:
-        mapa = mp.new_map(40,0.5)
+        mapa = mp.new_map(34,0.5)
         for y in x:
             if y == "release_year" or y == "cpu_cores" or y == "cpu_tier" or y == "gpu_tier" or y == "vram_gb" or y == "ram_gb" or y == "storage_gb" or y == "storage_drive_count" or y == "refresh_hz" or y == "battery_wh" or y == "charger_watts" or y == "psu_watts" or y == "warranty_months":
                 mp.put(mapa,y,int(x[y]))
