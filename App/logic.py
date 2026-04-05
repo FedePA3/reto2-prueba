@@ -48,16 +48,19 @@ def load_data(catalog):
     total = 0
     Os = mp.new_map()
     Oss = al.new_list()
-    Año_minimo = 0
+    Año_minimo = 2027
     Año_maximo = 0
-    precio_minimo = 0
+    precio_minimo = 100000
     precio_maximo = 0
     primeros = al.new_list()
     ultimos = al.new_list()
     for x in input_file:
         mapa = mp.new_map()
         for y in x:
-            mp.put(mapa,y,x[y])
+            if y == "release_year" or y == "cpu_cores" or y == "cpu_tier" or y == "gpu_tier" or y == "vram_gb" or y == "ram_gb" or y == "storage_gb" or y == "storage_drive_count" or y == "refresh_hz" or y == "battery_wh" or y == "charger_watts" or y == "psu_watts" or y == "warranty_months":
+                mp.put(mapa,y,int(x[y]))
+            elif y == "price" or y == "cpu_threads" or y == "cpu_base_ghz" or y == "cpu_boost_ghz" or y == "display_size_in" or y == "bluetooth" or y == "weight_kg":
+                mp.put(mapa,y,float(x[y]))
         al.add_last(computers,mapa)
         total += 1
         sistema = mp.get(mapa,"os")
@@ -68,16 +71,16 @@ def load_data(catalog):
             mp.put(Os,sistema,1)
         if al.is_present(Oss,sistema,al.cmp_function) == -1:
             al.add_last(Oss,sistema)
-        if total > 6:
+        if total <= 5:
             al.add_last(primeros,mapa)
-        if total > 999995:
+        if total > 99995:
             al.add_last(ultimos,mapa)
-        año = int(mp.get(mapa,"release_year"))
+        año = mp.get(mapa,"release_year")
         if año > Año_maximo:
             Año_maximo = año
         if año < Año_minimo:
             Año_minimo = año
-        precio = int(mp.get(mapa,"price"))
+        precio = mp.get(mapa,"price")
         if precio > precio_maximo:
             precio_maximo = precio
         if precio < precio_minimo:
