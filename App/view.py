@@ -1,5 +1,10 @@
 import sys
-
+from DataStructures.List import array_list as al
+from DataStructures.Map import map_linear_probing as mp
+default_limit = 1000
+sys.setrecursionlimit(default_limit*10)
+from tabulate import tabulate
+import App.logic as logic
 
 def new_logic():
     """
@@ -23,10 +28,58 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
-
-
+   
+    datos = logic.load_data(control)
+    tiempo,total,Os,Año_minimo,Año_maximo,precio_minimo,precio_maximo,primeros,ultimos, Oss = datos
+    total = datos['total']
+    mayor = datos['mayor']
+    menor = datos['menor']
+    listado_primeros = datos['primeros']
+    listado_ultimos = datos['ultimos']
+    print(f"Tiempo de carga: {tiempo} segundos")
+    print(f"Total de computadores cargados: {total}")   
+    print(f"Año mínimo de lanzamiento:   {Año_minimo}")
+    print(f"Año máximo de lanzamiento:   {Año_maximo}")
+    print(f"Precio mínimo:               ${precio_minimo:,.2f}")
+    print(f"Precio máximo:               ${precio_maximo:,.2f}")
+    
+    print("\nTotal de equipos por Sistema Operativo:")
+    os_data = []
+    for i in range(0,al.size(Oss)):
+        sistema = al.get_element(Oss,i)
+        total = mp.get(Os,sistema)
+        os_data.append([sistema,total])
+    print(tabulate(os_data,
+                   headers=["Sistema Operativo", "Total Equipos"],
+                   tablefmt="grid",
+                   colalign=("left", "right")))
+    
+    headers = ["Marca", "Modelo", "Tipo", "CPU", "RAM (GB)", "Storage (GB)", "Año", "Precio ($)"]
+    print("\n====== Primeros 5 equipos ======")
+    primeros_data = []
+    for i in range(0,5):
+        computador = al.get_element(primeros,i)
+        primeros_data.append([
+            mp.get(computador,"brand"), mp.get(computador,"model"), mp.get(computador,"device_type"),
+            mp.get(computador,"cpu_model"), mp.get(computador,"ram_gb"), mp.get(computador,"storage_gb"),
+            mp.get(computador,"release_year"), f"{mp.get(computador,"price"):,.2f}"
+        ])
+    print(tabulate(primeros_data,
+                   headers=headers,
+                   tablefmt="grid"))
+    
+    print("\n====== Ultimos 5 equipos ======")
+    ultimos_data = []
+    for i in range(0,5):
+        computador = al.get_element(ultimos,i)
+        ultimos_data.append([
+            mp.get(computador,"brand"), mp.get(computador,"model"), mp.get(computador,"device_type"),
+            mp.get(computador,"cpu_model"), mp.get(computador,"ram_gb"), mp.get(computador,"storage_gb"),
+            mp.get(computador,"release_year"), f"{mp.get(computador,"price"):,.2f}"
+        ])
+    print(tabulate(ultimos_data,
+                   headers=headers,
+                   tablefmt="grid"))
 def print_data(control, id):
     """
         Función que imprime un dato dado su ID
