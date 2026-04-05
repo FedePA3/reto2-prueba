@@ -64,12 +64,11 @@ def load_data(catalog):
         al.add_last(computers,mapa)
         total += 1
         sistema = mp.get(mapa,"os")
-        suma = mp.get(Os,mp.get(mapa,"os"))
+        suma = mp.get(Os,sistema)
         if suma != None:
             mp.put(Os,sistema,suma + 1)
         else:
             mp.put(Os,sistema,1)
-        if al.is_present(Oss,sistema,al.cmp_function) == -1:
             al.add_last(Oss,sistema)
         if total <= 5:
             al.add_last(primeros,mapa)

@@ -31,11 +31,6 @@ def load_data(control):
    
     datos = logic.load_data(control)
     tiempo,total,Os,Año_minimo,Año_maximo,precio_minimo,precio_maximo,primeros,ultimos, Oss = datos
-    total = datos['total']
-    mayor = datos['mayor']
-    menor = datos['menor']
-    listado_primeros = datos['primeros']
-    listado_ultimos = datos['ultimos']
     print(f"Tiempo de carga: {tiempo} segundos")
     print(f"Total de computadores cargados: {total}")   
     print(f"Año mínimo de lanzamiento:   {Año_minimo}")
