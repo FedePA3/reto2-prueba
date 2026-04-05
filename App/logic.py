@@ -46,10 +46,10 @@ def load_data(catalog):
     input_file = csv.DictReader(open(booksfile, encoding='utf-8'))
     computers = catalog['computers']
     total = 0
-    Os = mp.new_map()
+    Os = mp.new_map(100,0.5)
     Oss = al.new_list()
-    Año_minimo = 2027
-    Año_maximo = 0
+    Año_minimo = float("inf")
+    Año_maximo = float("inf")
     precio_minimo = 100000
     precio_maximo = 0
     primeros = al.new_list()
