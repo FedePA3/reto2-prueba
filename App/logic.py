@@ -131,33 +131,43 @@ def req_3(catalog,N,GPU,Brand):
     computadores = catalog["computers"]
     total = 0
     ram = 0
-    lista_precios = al.new_list()
-    mapa_precios = mp.new_map(100000,0.5)
+    lista_filtrada = al.new_list()
     for i in range(al.size(computadores)):
         computador = al.get_element(computadores,i)
         if mp.get(computador,"brand") == Brand and mp.get(computador,"gpu_model") == GPU:
-            precio = int(mp.get(computador,"price"))
-            if mp.get(mapa_precios,precio) == None:
-                mp.put(mapa_precios,precio,computador)
-            else:
-                precio +=1
-                mp.put(mapa_precios,precio,computador)    
-            al.add_last(lista_precios,precio)
+            al.add_last(lista_filtrada,computador)
             total += 1
-            ram += int(mp.get(computador,"ram_gb"))
-    al.quick_sort(lista_precios,al.default_sort_criteria)
+            ram += mp.get(computador,"ram_gb")
+    al.merge_sort(lista_filtrada,criterio_req3)
     lista_computadores = al.new_list()
-    tamaño = al.size(lista_precios)-1
-    for i in range(N):
-        elemento = al.get_element(lista_precios,tamaño-i)
-        computador = mp.get(mapa_precios,elemento)
-        al.add_last(lista_computadores,computador)
-    ram = ram/total
+    tamaño = al.size(lista_filtrada)-1
+    if N <= al.size(lista_filtrada):
+        limite = N
+    else:
+        limite = al.size(lista_filtrada)
+    
+    for i in range(limite):
+        elemento = al.get_element(lista_filtrada,tamaño-i)
+        al.add_last(lista_computadores,elemento)
+    if total > 0:
+        ram = ram/total
     end = get_time()
     tiempo = delta_time(start,end)
     
     return tiempo,total,ram,lista_computadores
-    
+
+
+def criterio_req3(comp1,comp2):
+    precio1 = mp.get(comp1, "price")
+    precio2 = mp.get(comp2, "price")
+    if precio1 != precio2:
+        return precio1 < precio2
+
+    # empate → peso
+    peso1 = mp.get(comp1, "weight_kg")
+    peso2 = mp.get(comp2, "weight_kg")
+
+    return peso1 < peso2
 
 
 def req_4(catalog):
