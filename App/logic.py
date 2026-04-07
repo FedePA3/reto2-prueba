@@ -195,46 +195,39 @@ def req_6(catalog,N,form_factor,display_type):
     total = 0
     Windows = 0
     linux = 0
-    lista_puntaje = al.new_list()
-    mapa_puntaje = mp.new_map(100000,0.5)
+    lista_computadores = al.new_list()
     for i in range(al.size(computadores)):
         computador = al.get_element(computadores,i)
         if mp.get(computador,"form_factor") == form_factor and mp.get(computador,"display_type") == display_type:
             total += 1
-            puntaje = (mp.get(computador,"battery_wh") * mp.get(computador,"cpu boost ghz"))/mp.get(computador,"charger_watts")
-            al.add_last(lista_puntaje,puntaje)
-            mp.put(mapa_puntaje,puntaje,computador)
             if mp.get(computador,"os") == "Windows":
                 Windows += 1
-            if mp.get(computador,"os") == "linux":
+            if mp.get(computador,"os") == "Linux":
                 linux += 1
-    al.quick_sort(lista_puntaje,al.default_sort_criteria)
+            al.add_last(lista_computadores,computador)
+    al.merge_sort(lista_computadores,criterio_req6)
     lista = al.new_list()
-    tamaño = al.size(lista_puntaje) - 1
-    for i in range(N):
-        p = al.get_element(lista_puntaje,tamaño-i)
-        computador = mp.get(mapa_puntaje,p)
-        if tamaño-i > 0:
-            anterior = (tamaño-i) -1
-            r = al.get_element(lista_puntaje,anterior)
-            if r == p:
-                comant = mp.get(mapa_puntaje,r)
-                preciop = mp.get(computador,"price")
-                precior = mp.get(comant,"price")
-                if preciop < precior:
-                    al.exchange(lista_puntaje,tamaño-i,anterior)
-                    al.add_last(lista,comant)
-                else:
-                    al.add_last(lista,computador)
-            else:
-                al.add_last(lista,computador)
-        else:
-            al.add_last(lista,computador)
+    tamaño = al.size(lista_computadores)-1
+    if N <= al.size(lista_computadores):
+        limite = N
+    else:
+        limite = al.size(lista_computadores)
+    
+    for i in range(limite):
+        elemento = al.get_element(lista_computadores,tamaño-i)
+        al.add_last(lista,elemento)
     end = get_time()
     tiempo = delta_time(start,end)
     return tiempo,total,Windows,linux,lista
 
-
+def criterio_req6(comp1,comp2):
+    puntaje1 = (mp.get(comp1,"battery_wh") * mp.get(comp1,"cpu_boost_ghz"))/mp.get(comp1,"charger_watts")
+    puntaje2 = (mp.get(comp2,"battery_wh") * mp.get(comp2,"cpu_boost_ghz"))/mp.get(comp2,"charger_watts")
+    if puntaje1 != puntaje2:
+        return puntaje1 < puntaje2
+    precio1 = mp.get(comp1,"price")
+    precio2 = mp.get(comp2,"price")
+    return precio1 < precio2
 # Funciones para medir tiempos de ejecucion
 
 def get_time():
